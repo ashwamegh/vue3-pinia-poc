@@ -7,6 +7,9 @@
       <h1>Pinia Tasks</h1>
     </header>
 
+    <!-- loading -->
+    <div class="loading" v-if="taskStore.loading">Loading tasks...</div>
+
     <!-- new task -->
     <div class="new-task">
       <TaskForm />
@@ -37,18 +40,21 @@
 </template>
 
 <script>
-import { ref } from 'vue';
-import { useTaskStore } from './stores/TaskStore';
-import TaskDetails from './components/TaskDetails.vue'
-import TaskForm from './components/TaskForm.vue';
-
-const filter = ref("all")
+  import { ref } from 'vue';
+  import { useTaskStore } from './stores/TaskStore';
+  import TaskDetails from './components/TaskDetails.vue'
+  import TaskForm from './components/TaskForm.vue';
 
   export default {
     components: {TaskDetails, TaskForm},
     setup () {
+      const taskStore = useTaskStore()
+      const filter = ref("all")
+
+      // fetch tasks
+      taskStore.getTasks()
       return ({
-        taskStore: useTaskStore(),
+        taskStore,
         filter
       })
     }
